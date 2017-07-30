@@ -2,6 +2,9 @@ package desafio.com.br.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+
+import desafio.com.br.modelo.Senha;
 import desafio.com.br.util.ClientHttp;
+import desafio.com.br.util.ConvercaoJSON;
 
 /**
  * Servlet implementation class AtendimentoServlet
@@ -31,8 +38,11 @@ public class AtendimentoServlet extends HttpServlet {
 	
 	//variaveis
 	JSONObject 		resulJson 	= null;
-	JSONArray		listaJson 	= new JSONArray();
+	//JSONArray		listaJson 	= new JSONArray();
 	String 			result 		= null;
+	
+	ConvercaoJSON paraClasse = new ConvercaoJSON();
+	List<Senha> listaNova = new ArrayList<Senha>();
       
 
     /**
@@ -71,16 +81,22 @@ public class AtendimentoServlet extends HttpServlet {
 					//resultado obtido em JSON
 					resulJson 		= new JSONObject(result);
 					
+					//////////////////////////nova alteração
+					listaNova = paraClasse.converterParaClasse(resulJson.toString());
+					Collections.sort(listaNova);//aqui faz o ordenamento dos atendimentos.
+					
+					/////////////////////////////////////////////////////////////
+					
 					//obter lista do array com as senhas
-					listaJson = resulJson.getJSONArray("input");
+				//	listaJson = resulJson.getJSONArray("input");
 					
 					//controle da lista de senhas para ser chamado.
-					controle 		= listaJson.length()-1;
+					controle 		= listaNova.size()-1;
 					proximo 		= 0;
 					
 					//para teste
-					System.out.println("Tamanho: "+listaJson.length());					
-					System.out.println("Posição qualquer: "+listaJson.optJSONObject(0));
+					System.out.println("Tamanho: "+listaNova.size());					
+					System.out.println("Posição qualquer: "+listaNova.get(0));
 									
 			}else {
 				//aqui entro todas as vezes enquanto estiver usuários na fila.
@@ -94,16 +110,19 @@ public class AtendimentoServlet extends HttpServlet {
 			//verifica se teve requisição para próximo atendimento.
 			if(atendimento==1) {
 ;
-				System.out.println("Tamanho: "+listaJson.length());
+				System.out.println("Tamanho: "+listaNova.size());
 				
 				//validar se existe senha na lista
-				if(listaJson.optJSONObject(proximo)!=null) {
+				if(listaNova.get(proximo)!=null) {
 					//criar instancia nova aqui sempre que o metodo for chamado, garantir nova entrega.
-					JSONObject usuario = new JSONObject(listaJson.optJSONObject(proximo).toString());
+					JSONObject usuario = new JSONObject(new Gson().toJson(listaNova.get(proximo)));
 					
 					//add a senha no JSON
 					resultLista.put("tamanho", controle);
 					resultLista.put("usuario", usuario);
+					
+					//POST de cada senha chamada
+					//new ClientHttp().requestPostSEAT("http://seat.ind.br/processo-seletivo/desafio-post-2017-03.php", "thiago pereira de azara", "150142851", controle+"");
 					
 					//add para o ajax pegar
 					out.println(resultLista);

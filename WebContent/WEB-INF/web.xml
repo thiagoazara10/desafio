@@ -15,6 +15,38 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>AtendimentoServlet</servlet-name>
-    <url-pattern>/atendimentoServlet</url-pattern>   
+    <url-pattern>/atendimentoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Etapa1Servlet</servlet-name>
+    <servlet-class>desafio.com.br.servlet.Etapa1Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Etapa1Servlet</servlet-name>
+    <url-pattern>/etapa1Servlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Etapa2Servlet</servlet-name>
+    <servlet-class>desafio.com.br.servlet.Etapa2Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Etapa2Servlet</servlet-name>
+    <url-pattern>/etapa2Servlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Etapa3Servlet</servlet-name>
+    <servlet-class>desafio.com.br.servlet.Etapa3Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Etapa3Servlet</servlet-name>
+    <url-pattern>/etapa3Servlet</url-pattern>
+  </servlet-mapping>
+    <servlet>
+    <servlet-name>Etapa4Servlet</servlet-name>
+    <servlet-class>desafio.com.br.servlet.Etapa4Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Etapa4Servlet</servlet-name>
+    <url-pattern>/etapa4Servlet</url-pattern>
   </servlet-mapping>
 </web-app>

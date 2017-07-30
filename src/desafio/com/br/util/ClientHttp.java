@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -15,11 +16,16 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
+import desafio.com.br.modelo.Senha;
 
 
 public class ClientHttp {
@@ -40,57 +46,33 @@ public class ClientHttp {
 }
 	
 	
-	public String requestPostSEAT(String url, String paramNome, String paramChave){
+	
+	public String requestPostSEAT(String url, JSONObject paramJson){
 		
-		if(url.length()==0 && paramNome.length() == 0 && paramChave.length() == 0) return "Parametro inválido.";
-
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpPost post = new HttpPost(url);
-
-		// add header
-		post.setHeader("User-Agent", "SEAT");
-
-		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-		urlParameters.add(new BasicNameValuePair("nome", paramNome));
-		urlParameters.add(new BasicNameValuePair("chave", paramChave));
-		//urlParameters.add(new BasicNameValuePair("locale", ""));
-		//urlParameters.add(new BasicNameValuePair("caller", ""));
-		//urlParameters.add(new BasicNameValuePair("num", "12345"));
+		HttpResponse  response 		= null;
+		String       postUrl       	= url;// put in your url
+		Gson         gson          	= new Gson();
+		HttpClient   httpClient   	= HttpClientBuilder.create().build();
+		HttpPost     post          	= new HttpPost(postUrl);
+		StringEntity postingString 	= null;;
 
 		try {
-			
-			post.setEntity(new UrlEncodedFormEntity(urlParameters));
-			HttpResponse response = client.execute(post);
-			System.out.println("Response Code : "
-			                + response.getStatusLine().getStatusCode());
-
-			BufferedReader rd = new BufferedReader(
-			        new InputStreamReader(response.getEntity().getContent()));
-
-			StringBuffer result = new StringBuffer();
-			String line = "";
-			
-			while ((line = rd.readLine()) != null) {
-				result.append(line);
-			}
-		
-			return result.toString();
-			
+			postingString = new StringEntity(gson.toJson(paramJson));
+			post.setEntity(postingString);
+			post.setHeader("Content-type", "application/json");
+			response = httpClient.execute(post);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "erro1";
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "erro2";
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "erro3";
 		}
-
-	
+		
+		return response.toString();
 	}
 	
 	
@@ -100,12 +82,12 @@ public class ClientHttp {
 		JSONObject 		resulJson;
 		JSONArray		listaJson;
 		String 			result;
-		
+		ConvercaoJSON 	convercao = new ConvercaoJSON();
 		
 		try {
 			//requisição via GET
 			result = new ClientHttp().requestGetSEAT("http://seat.ind.br/processo-seletivo/desafio-2017-03.php?nome=thiago pereira de azara");
-			
+			System.out.println(result);
 			//resultado obtido em JSON
 			resulJson = new JSONObject(result);
 			
@@ -115,6 +97,15 @@ public class ClientHttp {
 			//obter lista do array
 			listaJson = resulJson.getJSONArray("input");
 
+			System.out.println("Outro tamanho: "+convercao.converterParaClasse(resulJson.toString()).size());
+			
+			ArrayList<Senha> n = new ArrayList<Senha>();
+			n = (ArrayList<Senha>) convercao.converterParaClasse(resulJson.toString());
+			Collections.sort(n);
+			
+			for(int i = 0; i < n.size(); i++){
+				System.out.println(n.get(i).getEmissao());
+			}
 			
 			//para teste
 			System.out.println("Tamanho: "+listaJson.length());
