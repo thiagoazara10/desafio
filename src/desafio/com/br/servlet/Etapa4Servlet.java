@@ -43,6 +43,7 @@ public class Etapa4Servlet extends HttpServlet {
 	int cont			= 0;
 	int cont1			= 0;
 	int cont2			= 0;
+	int cont3			= 0;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -69,9 +70,7 @@ public class Etapa4Servlet extends HttpServlet {
 		paraClasse 			= new ConvercaoJSON();
 		resultLista 		= new JSONObject();
 		result 				= new ClientHttp().requestGetSEAT("http://seat.ind.br/processo-seletivo/desafio-2017-03.php?nome=thiago pereira de azara");
-		
-
-		
+				
 		listaClasse = new ArrayList<>();
 		
 		try {
@@ -108,19 +107,23 @@ public class Etapa4Servlet extends HttpServlet {
 				
 				System.out.println(listaClasse.get(j));
 				
-				for(int k = 0; k < listaClasse.size(); k++){
-					if(listaClasse.get(j)== listaClasse.get(k)) {
-						cont1++;
-					}
+				int temp = listaClasse.get(j);
+				
+				if(listaClasse.get(j)==0){
+					cont1++;
 				}
-				
-				
-				System.out.println((listaClasse.get(j)*5)+"min: "+cont1);
-							
-							
-				cont1 =0;				
+				if(listaClasse.get(j)==1){
+					cont2++;
+				}
+				if(listaClasse.get(j)==2){
+					cont3++;
+				}
+					
 			}
-			
+			System.out.println(0+"Outros sem previsão: "+cont1);	
+			System.out.println(5+"min: "+cont2);
+			System.out.println(10+"min: "+cont3);
+						
 			Collections.sort(listaNova);
 						
 			etapa1Json 		= new JSONObject();

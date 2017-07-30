@@ -24,6 +24,8 @@ import desafio.com.br.util.ConvercaoJSON;
 
 /**
  * Servlet implementation class AtendimentoServlet
+ * Está Servlet é apenas para ilustrar um sistema de chamadas de senhas.
+ * ela é ativada a cada vez que clicar no botão "Chamar próximo usuário"
  */
 @WebServlet("/AtendimentoServlet")
 public class AtendimentoServlet extends HttpServlet {

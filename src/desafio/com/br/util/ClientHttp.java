@@ -47,20 +47,31 @@ public class ClientHttp {
 	
 	
 	
-	public String requestPostSEAT(String url, JSONObject paramJson){
+	public String requestPostSEAT1(String url, JSONObject paramJson){
 		
 		HttpResponse  response 		= null;
 		String       postUrl       	= url;// put in your url
 		Gson         gson          	= new Gson();
 		HttpClient   httpClient   	= HttpClientBuilder.create().build();
 		HttpPost     post          	= new HttpPost(postUrl);
-		StringEntity postingString 	= null;;
+		StringEntity postingString 	= null;
+		StringBuffer result 		= null;
 
 		try {
-			postingString = new StringEntity(gson.toJson(paramJson));
+			postingString = new StringEntity(paramJson.toString());
 			post.setEntity(postingString);
 			post.setHeader("Content-type", "application/json");
 			response = httpClient.execute(post);
+			
+			BufferedReader rd = new BufferedReader(
+			        new InputStreamReader(response.getEntity().getContent()));
+			
+			
+			result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,7 +83,75 @@ public class ClientHttp {
 			e.printStackTrace();
 		}
 		
-		return response.toString();
+		return result.toString();
+	}
+	public String requestPostSEAT(String url, JSONObject paramJson){
+		try {
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost(url);
+		
+		//String de retorno
+		String resultCode = "";
+
+		// add header
+		post.setHeader("User-Agent", "CEF");
+
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		//está sendo fixo
+		
+		urlParameters.add(new BasicNameValuePair("nome", paramJson.getString("nome")));
+			
+		urlParameters.add(new BasicNameValuePair("chave", "150142851"));
+		urlParameters.add(new BasicNameValuePair("resultado", paramJson.getString("resultado")));
+		//urlParameters.add(new BasicNameValuePair("caller", ""));
+		//urlParameters.add(new BasicNameValuePair("num", "12345"));
+
+		StringBuffer result = null;		
+		
+			post.setEntity(new UrlEncodedFormEntity(urlParameters));
+			HttpResponse response = client.execute(post);
+			
+			//recebe o resultado
+			resultCode = response.getStatusLine().getStatusCode()+"";
+			
+			//verificar a saida do retorno HTTP
+			System.out.println("Codigo tempo de execução : " + resultCode);
+
+			BufferedReader rd = new BufferedReader(
+			        new InputStreamReader(response.getEntity().getContent()));
+
+			result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			//testar saida
+			//System.out.println("Aqui é o result do Márcio: "+result);
+			
+			//verificar se a resposta do HTTP para alterar o retorno e ser tratado pelo JSON
+			if (!resultCode.equalsIgnoreCase("200")) {
+				result.setLength(0);
+				result.append("{\"result\":10000}");
+			}
+	
+			return result.toString();	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	

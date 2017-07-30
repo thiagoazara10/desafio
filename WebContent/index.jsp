@@ -31,6 +31,7 @@
 			<input type="button" id="teste1" value="Etapa 2" /><br><br>	
 			<input type="button" id="teste2" value="Etapa 3" /><br><br>	
 			<input type="button" id="teste3" value="Etapa 4" /><br><br>	
+			<input type="button" id="teste4" value="Etapa 5" /><br><br>	
 		<script>
 			$(document).ready(function(){		
 				$('#atendimento').on('submit', function(e){
@@ -116,6 +117,22 @@
 				    $("#teste3").click(function(){
 	   					$.ajax({
 	        				url: 	'etapa4Servlet',
+	        				method: 'POST',	       				
+	        				success: function(data) {
+	        					console.log("sucesso na requisição -> "+data);	            							           				
+	                 		},
+	    					error: function(){	    			
+	    						console.log("erro ao enviar a servlet !");
+	 						}                   
+	    				});
+				    });
+				});
+				
+				//Botão Etapa5
+				$(document).ready(function(){
+				    $("#teste4").click(function(){
+	   					$.ajax({
+	        				url: 	'etapa5Servlet',
 	        				method: 'POST',	       				
 	        				success: function(data) {
 	        					console.log("sucesso na requisição -> "+data);	            							           				

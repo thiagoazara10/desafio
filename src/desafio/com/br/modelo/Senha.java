@@ -1,8 +1,10 @@
 package desafio.com.br.modelo;
 
+import java.util.Comparator;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Senha implements Comparable<Senha>{
+public class Senha implements Comparable<Senha>, Comparator<Senha>{
 	
 	@SerializedName("prioridade")
 	private String prioridade;
@@ -66,6 +68,11 @@ public class Senha implements Comparable<Senha>{
             return 1;
         }
         return 0;
+	}
+	@Override
+	public int compare(Senha o1, Senha o2) {
+		// TODO Auto-generated method stub
+		return o2.getPrioridade().compareTo(o1.getPrioridade());
 	}
 	
 }

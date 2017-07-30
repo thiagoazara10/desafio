@@ -41,12 +41,20 @@
     <servlet-name>Etapa3Servlet</servlet-name>
     <url-pattern>/etapa3Servlet</url-pattern>
   </servlet-mapping>
-    <servlet>
+  <servlet>
     <servlet-name>Etapa4Servlet</servlet-name>
     <servlet-class>desafio.com.br.servlet.Etapa4Servlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Etapa4Servlet</servlet-name>
     <url-pattern>/etapa4Servlet</url-pattern>
+  </servlet-mapping>
+    <servlet>
+    <servlet-name>Etapa5Servlet</servlet-name>
+    <servlet-class>desafio.com.br.servlet.Etapa5Servlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Etapa5Servlet</servlet-name>
+    <url-pattern>/etapa5Servlet</url-pattern>
   </servlet-mapping>
 </web-app>
