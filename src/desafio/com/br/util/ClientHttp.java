@@ -9,16 +9,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,6 +57,8 @@ public class ClientHttp {
 	
 	
 	public String requestPostSEAT1(String url, JSONObject paramJson){
+		
+		System.out.println("Cliete HTTP -> "+paramJson);
 		
 		HttpResponse  response 		= null;
 		String       postUrl       	= url;// put in your url
@@ -86,23 +97,26 @@ public class ClientHttp {
 		return result.toString();
 	}
 	public String requestPostSEAT(String url, JSONObject paramJson){
+		
+		
+		
 		try {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost(url);
-		
+		System.out.println("Cliete HTTP -> "+paramJson.getLong("chave"));
 		//String de retorno
 		String resultCode = "";
 
 		// add header
-		post.setHeader("User-Agent", "CEF");
+		post.setHeader("User-Agent", "SEAF");
 
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		//está sendo fixo
 		
-		urlParameters.add(new BasicNameValuePair("nome", paramJson.getString("nome")));
-			
-		urlParameters.add(new BasicNameValuePair("chave", "150142851"));
+		urlParameters.add(new BasicNameValuePair("nome", paramJson.getString("nome")));		
+		urlParameters.add(new BasicNameValuePair("chave", paramJson.getString("chave")));
 		urlParameters.add(new BasicNameValuePair("resultado", paramJson.getString("resultado")));
+	
 		//urlParameters.add(new BasicNameValuePair("caller", ""));
 		//urlParameters.add(new BasicNameValuePair("num", "12345"));
 
@@ -115,7 +129,7 @@ public class ClientHttp {
 			resultCode = response.getStatusLine().getStatusCode()+"";
 			
 			//verificar a saida do retorno HTTP
-			System.out.println("Codigo tempo de execução : " + resultCode);
+			System.out.println("Retorno HTTP : " + resultCode);
 
 			BufferedReader rd = new BufferedReader(
 			        new InputStreamReader(response.getEntity().getContent()));
@@ -153,6 +167,16 @@ public class ClientHttp {
 		return null;
 		
 	}
+	
+	
+	
+///////////////////////////////////////	
+ 
+
+///////////////////////////////////////
+	
+	
+	
 	
 	
 	public static void main(String args[]) {

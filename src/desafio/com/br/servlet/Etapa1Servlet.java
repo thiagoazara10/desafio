@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,21 +63,34 @@ public class Etapa1Servlet extends HttpServlet {
 		resultLista 		= new JSONObject();
 		result 				= new ClientHttp().requestGetSEAT("http://seat.ind.br/processo-seletivo/desafio-2017-03.php?nome=thiago pereira de azara");
 		
+		System.out.println("GET: "+result);
+		
 		try {
 			
 			resulJson 		= new JSONObject(result);
 			listaNova 		= paraClasse.converterParaClasse(resulJson.toString());
 			
 			Collections.sort(listaNova);
+			
+			System.out.println("Chave -> "+resulJson.getString("chave"));
 						
 			etapa1Json 		= new JSONObject();
 			etapa1Json.put("nome", "thiago pereira de azara");
-			etapa1Json.put("chave", "150142851");
+			etapa1Json.put("chave", resulJson.getString("chave").trim());
 			etapa1Json.put("resultado", new Gson().toJson(listaNova));
 			
 			System.out.println(etapa1Json);
 			
-			String retorno = new ClientHttp().requestPostSEAT("http://seat.ind.br/processo-seletivo/desafio-post-2017-03.php", etapa1Json);
+			/// INICIO - Caso fosse enviar um array JSON
+			JSONArray parameter = new JSONArray();
+			parameter .put(etapa1Json);
+
+			JSONObject mainObj = new JSONObject();
+			mainObj.put("parameters", parameter);
+			
+			System.out.println(mainObj);
+			
+			String retorno = new ClientHttp().requestPostSEAT("http://seat.ind.br/processo-seletivo/desafio-post-2017-03.php",etapa1Json);
 			
 			out.println("{'mesagem':'"+retorno+"'}");
 			

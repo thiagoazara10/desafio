@@ -18,7 +18,15 @@ public class Senha implements Comparable<Senha>, Comparator<Senha>{
 	private int naFrente;
 	@SerializedName("espera")
 	private long espera;
+	@SerializedName("chave")
+	private String chave;
 	
+	public String getChave() {
+		return chave;
+	}
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
 	public long getEspera() {
 		return espera;
 	}

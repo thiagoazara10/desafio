@@ -127,7 +127,7 @@ public class Etapa3Servlet extends HttpServlet {
 						
 			etapa1Json 		= new JSONObject();
 			etapa1Json.put("nome", "thiago pereira de azara");
-			etapa1Json.put("chave", "150142851");
+			etapa1Json.put("chave", resulJson.getString("chave").trim());
 			etapa1Json.put("resultado", new Gson().toJson(listaNova));
 			
 			System.out.println(etapa1Json);

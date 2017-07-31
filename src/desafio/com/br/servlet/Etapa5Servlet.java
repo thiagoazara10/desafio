@@ -136,7 +136,7 @@ public class Etapa5Servlet extends HttpServlet {
 						
 			etapa1Json 		= new JSONObject();
 			etapa1Json.put("resultado", new Gson().toJson(listaNova).toString());			
-			etapa1Json.put("chave", "150142851");
+			etapa1Json.put("chave", resulJson.getString("chave").trim());
 			etapa1Json.put("nome", "thiago pereira de azara");
 			
 			/// INICIO - Caso fosse enviar um array JSON
@@ -147,7 +147,7 @@ public class Etapa5Servlet extends HttpServlet {
 			mainObj.put("parameters", parameter);
 			
 			System.out.println(mainObj);
-			///FIM
+			/// FIM ----------------------------
 			
 			String retorno = new ClientHttp().requestPostSEAT("http://seat.ind.br/processo-seletivo/desafio-post-2017-03.php", etapa1Json);
 			//String retorno = "sucesso";
